@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: hospital-management-system
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+unsecure:
+  uri:
+    paths: /**
