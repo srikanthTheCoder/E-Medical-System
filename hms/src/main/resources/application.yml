@@ -1,17 +1,16 @@
 server:
   port: 8080
 
+
 spring:
   application:
     name: hospital-management-system
-
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-
-unsecure:
-  uri:
-    paths: /**
+  datasource:    url: jdbc:mysql://localhost:3306/srikanth?useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+  jpa:
+    generate-ddl: true    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:      ddl-auto: update
+  h2:    console:      enabled: true
+      path: /h2

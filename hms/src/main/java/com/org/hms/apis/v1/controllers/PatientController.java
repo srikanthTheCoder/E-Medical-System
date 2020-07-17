@@ -7,38 +7,38 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.org.hms.apis.v1.V1PatientAPI;
-import com.org.hms.apis.v1.models.Doctor;
+import com.org.hms.apis.v1.models.Doctors;
 
 @Validated
 @RestController
 public class PatientController implements V1PatientAPI{
 
 	@Override
-	public ResponseEntity<List<Doctor>> showAllPatients() {
+	public ResponseEntity<List<Doctors>> showAllPatients() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResponseEntity<Doctor> patientViewByName() {
+	public ResponseEntity<Doctors> patientViewByName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResponseEntity<Doctor> patientViewById() {
+	public ResponseEntity<Doctors> patientViewById() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void addPatient(Doctor doctor) {
+	public void addPatient(Doctors doctors) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void updatePatient(long id, Doctor doctor) {
+	public void updatePatient(long id, Doctors doctors) {
 		// TODO Auto-generated method stub
 		
 	}
