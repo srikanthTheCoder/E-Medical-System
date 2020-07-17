@@ -20,27 +20,27 @@ public class PatientController implements V1PatientAPI{
 	}
 
 	@Override
-	public ResponseEntity<Doctors> patientViewByName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ResponseEntity<Doctors> patientViewById() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void addPatient(Doctors doctors) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void updatePatient(long id, Doctors doctors) {
+	public ResponseEntity<Doctors> patientViewByName(String id) {
 		// TODO Auto-generated method stub
-		
+		return null;
+	}
+
+	@Override
+	public ResponseEntity<Doctors> patientViewById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void updatePatient(String id, Doctors doctors) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

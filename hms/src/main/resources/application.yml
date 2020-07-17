@@ -1,10 +1,15 @@
 server:
   port: 8080
 
+#spring.application.name=spring-config-server
+#spring.profiles.active=development
+#spring.cloud.config.uri=http://localhost:8888
+#management.security.enabled=false
+#management.endpoints.web.exposure.include=*
 
 spring:
-  application:
-    name: hospital-management-system
+#  application:
+#    name: hospital-management-system
   datasource:    url: jdbc:mysql://localhost:3306/srikanth?useSSL=false
     driver-class-name: com.mysql.jdbc.Driver
     username: root
@@ -12,5 +17,7 @@ spring:
   jpa:
     generate-ddl: true    database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:      ddl-auto: update
-  h2:    console:      enabled: true
-      path: /h2
+management:
+  security:
+    enabled: false
+  endpoints:    web:      exposure:        include: "*"

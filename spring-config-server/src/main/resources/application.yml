@@ -11,6 +11,7 @@ spring:
           search-paths: server-config/
 server:
   port: 8888
+
 management:
   security:
     enabled: false

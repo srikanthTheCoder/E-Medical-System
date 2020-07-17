@@ -31,6 +31,7 @@ public interface V1DoctorAPI {
 	})
 	public ResponseEntity<List<Doctors>> showAllDoctors();
 	
+
 	@GetMapping("/viewByName/{name}")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctors.class ))),
