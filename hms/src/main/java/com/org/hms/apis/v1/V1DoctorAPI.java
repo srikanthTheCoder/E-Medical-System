@@ -2,6 +2,8 @@ package com.org.hms.apis.v1;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,9 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.org.hms.apis.v1.models.DoctorResponse;
-import com.org.hms.apis.v1.models.Doctors;
-import com.org.hms.apis.v1.models.ErrorResponse;
+import com.org.hms.apis.exceptions.models.ErrorResponse;
+import com.org.hms.apis.v1.entity.Doctor;
+import com.org.hms.apis.v1.models.ResponseDTO;
 
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,40 +28,40 @@ public interface V1DoctorAPI {
 	
 	@GetMapping("")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctors.class ))),
+			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctor.class))),
 			@ApiResponse(responseCode = "400", description = "Request is not well-formed, syntactically incorrect, or violates schema", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
-	public ResponseEntity<List<Doctors>> showAllDoctors();
+	public ResponseEntity<List<Doctor>> showAllDoctors();
 	
 
 	@GetMapping("/viewByName/{name}")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctors.class ))),
+			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctor.class))),
 			@ApiResponse(responseCode = "400", description = "Request is not well-formed, syntactically incorrect, or violates schema", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
-	public ResponseEntity<Doctors> doctorViewByName(@PathVariable("id") String id);
+	public ResponseEntity<Doctor> doctorViewByName(@PathVariable String name);
 	
 	
-	@GetMapping("/viewById/{id}")
+	@GetMapping("/{id}")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctors.class ))),
+			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctor.class))),
 			@ApiResponse(responseCode = "400", description = "Request is not well-formed, syntactically incorrect, or violates schema", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
-	public ResponseEntity<List<Doctors>> doctorViewById(@PathVariable("id") String id);
+	public ResponseEntity<Doctor> doctorViewById(@PathVariable("id") Long id);
 	
 	
 	@PostMapping(value = "/addDoctor", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctors.class ))),
+			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctor.class))),
 			@ApiResponse(responseCode = "400", description = "Request is not well-formed, syntactically incorrect, or violates schema", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
-	DoctorResponse addDoctor(@RequestBody Doctors doctors);
+	ResponseEntity<ResponseDTO> addDoctor(@Valid @RequestBody Doctor doctors);
 	
 	@PutMapping(value = "/updateDoctor/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctors.class ))),
+			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctor.class))),
 			@ApiResponse(responseCode = "400", description = "Request is not well-formed, syntactically incorrect, or violates schema", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
-	void updateDoctor(@PathVariable("id") String id, @RequestBody Doctors doctors);
+	ResponseEntity<ResponseDTO> updateDoctor(@PathVariable("id") Long id, @RequestBody Doctor doctors);
 
 }

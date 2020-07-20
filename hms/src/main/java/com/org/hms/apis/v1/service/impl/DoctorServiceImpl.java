@@ -2,14 +2,14 @@ package com.org.hms.apis.v1.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.org.hms.apis.exceptions.DoctorNotFoundException;
 import com.org.hms.apis.v1.entity.Doctor;
-import com.org.hms.apis.v1.models.DoctorResponse;
-import com.org.hms.apis.v1.models.Doctors;
+import com.org.hms.apis.v1.models.ResponseDTO;
 import com.org.hms.apis.v1.repositary.DoctorRepositary;
 import com.org.hms.apis.v1.service.DoctorService;
 
@@ -24,25 +24,49 @@ public class DoctorServiceImpl implements DoctorService {
 	}
 
 	@Override
-	public List<Doctors> getAllDoctors() {
+	public List<Doctor> getAllDoctors() {
 		List<Doctor> doctor = new ArrayList<Doctor>();
-		List<Doctors> doctors = new ArrayList<Doctors>();
 		doctorRepo.findAll().forEach(doc -> doctor.add(doc));
-		
-		doctor.forEach(doc -> doctors.add(new ObjectMapper().convertValue(doc, Doctors.class)));
-
-		return doctors;
+		return doctor;
 	}
 
 	@Override
-	public DoctorResponse addDoctor(Doctors doctor) {
+	public ResponseDTO addDoctor(Doctor doctor) {
 		
-		Doctor doc = new ObjectMapper().convertValue(doctor, Doctor.class);
-		Doctor doc1 = doctorRepo.save(doc);
-		DoctorResponse response = new DoctorResponse();
-		response.setMessage("Added Successfully");
-		response.setId(doc1.getId());
-		return response;
+		Doctor doc = doctorRepo.save(doctor);
+		ResponseDTO responseDTO = new ResponseDTO();
+		responseDTO.setMessage("Added Successfully");
+		responseDTO.setId(doc.getId());
+		return responseDTO;
+	}
+
+	@Override
+	public Doctor getDoctorByName(String name) {
+
+		Optional<Doctor> doc = doctorRepo.findByName(name);
+		return Optional.ofNullable(doc.get())
+				.orElseThrow(() -> new DoctorNotFoundException("Doctor Not found in name :" + name));
+	}
+
+	@Override
+	public Doctor getDoctorById(Long id) {
+		
+		Optional<Doctor> doc = doctorRepo.findById(id);
+		return Optional.ofNullable(doc.get())
+				.orElseThrow(() -> new DoctorNotFoundException("Doctor Not found for ID :" + id));
+	}
+
+	@Override
+	public ResponseDTO updateDoctor(Long id, Doctor doctor) {
+		Optional<Doctor> doc = doctorRepo.findById(id);
+		ResponseDTO responseDTO = new ResponseDTO();
+		if (doc.isPresent()) {
+			doctor.setId(id);
+			Doctor docs = doctorRepo.saveAndFlush(doctor);
+			responseDTO.setMessage("Updated Successfully");
+			responseDTO.setId(docs.getId());
+		}
+		return responseDTO;
 	}
 
 }

@@ -13,9 +13,17 @@ public class MessageRestController {
 	@Value("${server.url:Unable to connect to config server}")
 	private String url;
 
+	@Value("${server.message:Unable to connect to config server}")
+	private String message;
+
 	@RequestMapping("/server/url")
 	String getMsg() {
 		return this.url;
+	}
+
+	@RequestMapping("/server/message")
+	String getMessage() {
+		return this.message;
 	}
 
 }

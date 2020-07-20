@@ -2,21 +2,22 @@ package com.org.hms.apis.v1.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.org.hms.apis.v1.V1DoctorAPI;
-import com.org.hms.apis.v1.models.DoctorResponse;
-import com.org.hms.apis.v1.models.Doctors;
+import com.org.hms.apis.v1.entity.Doctor;
+import com.org.hms.apis.v1.models.ResponseDTO;
 import com.org.hms.apis.v1.service.DoctorService;
 
 @Validated
 @RestController
-@RefreshScope
 public class DoctorController implements V1DoctorAPI{
 
 	DoctorService service;
@@ -27,37 +28,37 @@ public class DoctorController implements V1DoctorAPI{
 	}
 
 	@Override
-	public ResponseEntity<List<Doctors>> showAllDoctors() {
+	public ResponseEntity<List<Doctor>> showAllDoctors() {
 
-		List<Doctors> doc = service.getAllDoctors();
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(doc);
+		List<Doctor> doc = service.getAllDoctors();
+		return ResponseEntity.status(HttpStatus.OK).body(doc);
 	}
 
 	@Override
-	public DoctorResponse addDoctor(Doctors doctor) {
+	public ResponseEntity<ResponseDTO> addDoctor(@Valid @RequestBody Doctor doctor) {
 
-		return service.addDoctor(doctor);
-
+		ResponseDTO responseDTO = service.addDoctor(doctor);
+		return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
 	}
 
 	@Override
-	public ResponseEntity<Doctors> doctorViewByName(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public ResponseEntity<List<Doctors>> doctorViewById(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<Doctor> doctorViewByName(String name) {
+		Doctor doc = service.getDoctorByName(name);
+		return ResponseEntity.status(HttpStatus.OK).body(doc);
 	}
 
 
 	@Override
-	public void updateDoctor(String id, Doctors doctors) {
-		// TODO Auto-generated method stub
-		
+	public ResponseEntity<Doctor> doctorViewById(Long id) {
+		Doctor doc = service.getDoctorById(id);
+		return ResponseEntity.status(HttpStatus.OK).body(doc);
+	}
+
+
+	@Override
+	public ResponseEntity<ResponseDTO> updateDoctor(Long id, Doctor doctor) {
+		ResponseDTO responseDTO = service.updateDoctor(id, doctor);
+		return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
 	}
 
 
