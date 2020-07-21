@@ -8,6 +8,9 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: root
+    hikari:      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
   jpa:
     generate-ddl: true    database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:      ddl-auto: update
@@ -31,12 +34,13 @@ validations:
 
 opentracing:
   jaeger:
+    service-name: spring-config-server
     enabled: true
-    http-sender:
-      url: http://localhost:16686/api/traces
-#      url: ${JAEGER_URL}
     log-spans: true
-    enable-b3-propagation: true
+    http-sender:      url: http://localhost:16686/api/traces
+    udp-sender:
+      host: localhost
+      port: 16686 
 
 management:
   security:
