@@ -5,22 +5,22 @@ import java.util.List;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.org.hms.apis.v1.entity.Doctor;
+import com.org.hms.apis.v1.models.DoctorDTO;
 import com.org.hms.apis.v1.models.ResponseDTO;
 
 @Service
 public interface DoctorService {
 
-	List<Doctor> getAllDoctors();
+	List<DoctorDTO> getAllDoctors();
 
-	ResponseDTO addDoctor(Doctor doctor);
+	ResponseDTO addDoctor(DoctorDTO doctor);
 
 	@Cacheable(value = "doctors", key = "#name")
-	Doctor getDoctorByName(String name);
+	DoctorDTO getDoctorByName(String name);
 
 	@Cacheable(value = "doctors", key = "#id")
-	Doctor getDoctorById(Long id);
+	DoctorDTO getDoctorById(Long id);
 
-	ResponseDTO updateDoctor(Long id, Doctor doctor);
+	ResponseDTO updateDoctor(Long id, DoctorDTO doctor);
 
 }

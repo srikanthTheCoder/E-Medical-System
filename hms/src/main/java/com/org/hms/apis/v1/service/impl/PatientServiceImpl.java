@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.org.hms.apis.exceptions.PatientNotFoundException;
+import com.org.hms.apis.v1.convertor.IPatient;
 import com.org.hms.apis.v1.entity.Patient;
+import com.org.hms.apis.v1.models.PatientDTO;
 import com.org.hms.apis.v1.models.ResponseDTO;
 import com.org.hms.apis.v1.repositary.PatientRepositary;
 import com.org.hms.apis.v1.service.PatientService;
@@ -17,21 +19,30 @@ import com.org.hms.apis.v1.service.PatientService;
 public class PatientServiceImpl implements PatientService {
 
 	PatientRepositary patientRepo;
+	IPatient patientMapper;
 
 	@Autowired
-	public PatientServiceImpl(PatientRepositary patientRepo) {
+	public PatientServiceImpl(PatientRepositary patientRepo, IPatient patientMapper) {
 		this.patientRepo = patientRepo;
+		this.patientMapper = patientMapper;
 	}
 
 	@Override
-	public List<Patient> getAllPatients() {
-		List<Patient> patientList = new ArrayList<Patient>();
-		patientRepo.findAll().forEach(doc -> patientList.add(doc));
+	public List<PatientDTO> getAllPatients() {
+		List<PatientDTO> patientList = new ArrayList<PatientDTO>();
+		List<Patient> patient = new ArrayList<Patient>();
+		patientRepo.findAll().forEach(pat -> patient.add(pat));
+		for (Patient pat : patient) {
+			PatientDTO patientDto = patientMapper.convertPatientToPatientDTO(pat);
+			patientList.add(patientDto);
+		}
 		return patientList;
 	}
 
 	@Override
-	public ResponseDTO addPatient(Patient patient) {
+	public ResponseDTO addPatient(PatientDTO patientDTO) {
+
+		Patient patient = patientMapper.convertPatientDTOToPatient(patientDTO);
 		patient = patientRepo.save(patient);
 		ResponseDTO response = new ResponseDTO();
 		response.setMessage("Added Successfully");
@@ -40,16 +51,20 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public Patient getPatientById(Long id) {
+	public PatientDTO getPatientById(Long id) {
 		Optional<Patient> patient = patientRepo.findById(id);
-		return Optional.ofNullable(patient.get())
-				.orElseThrow(() -> new PatientNotFoundException("Patient Not found for ID :" + id));
+		if (patient.isPresent()) {
+			PatientDTO patientDto = patientMapper.convertPatientToPatientDTO(patient.get());
+			return patientDto;
+		} else {
+			throw new PatientNotFoundException("Doctor Not found by id :" + id);
+		}
 	}
 
 	@Override
-	public ResponseDTO updatePatient(Long id, Patient patient) {
+	public ResponseDTO updatePatient(Long id, PatientDTO patientDTO) {
 		Optional<Patient> patients = patientRepo.findById(id);
-		System.out.println(" :: " + patients);
+		Patient patient = patientMapper.convertPatientDTOToPatient(patientDTO);
 		ResponseDTO responseDTO = new ResponseDTO();
 		if (patients.isPresent()) {
 			patient.setId(patients.get().getId());
@@ -60,5 +75,4 @@ public class PatientServiceImpl implements PatientService {
 		}
 		return responseDTO;
 	}
-
 }

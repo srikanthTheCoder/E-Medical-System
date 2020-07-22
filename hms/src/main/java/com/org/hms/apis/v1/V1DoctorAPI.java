@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.org.hms.apis.exceptions.models.ErrorResponse;
-import com.org.hms.apis.v1.entity.Doctor;
+import com.org.hms.apis.v1.models.DoctorDTO;
 import com.org.hms.apis.v1.models.ResponseDTO;
 
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,40 +28,40 @@ public interface V1DoctorAPI {
 	
 	@GetMapping("")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctor.class))),
+			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = DoctorDTO.class))),
 			@ApiResponse(responseCode = "400", description = "Request is not well-formed, syntactically incorrect, or violates schema", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
-	public ResponseEntity<List<Doctor>> showAllDoctors();
+	public ResponseEntity<List<DoctorDTO>> showAllDoctors();
 	
 
 	@GetMapping("/viewByName/{name}")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctor.class))),
+			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = DoctorDTO.class))),
 			@ApiResponse(responseCode = "400", description = "Request is not well-formed, syntactically incorrect, or violates schema", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
-	public ResponseEntity<Doctor> doctorViewByName(@PathVariable String name);
+	public ResponseEntity<DoctorDTO> doctorViewByName(@PathVariable String name);
 	
 	
 	@GetMapping("/{id}")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctor.class))),
+			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = DoctorDTO.class))),
 			@ApiResponse(responseCode = "400", description = "Request is not well-formed, syntactically incorrect, or violates schema", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
-	public ResponseEntity<Doctor> doctorViewById(@PathVariable("id") Long id);
+	public ResponseEntity<DoctorDTO> doctorViewById(@PathVariable("id") Long id);
 	
 	
 	@PostMapping(value = "/addDoctor", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctor.class))),
+			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = DoctorDTO.class))),
 			@ApiResponse(responseCode = "400", description = "Request is not well-formed, syntactically incorrect, or violates schema", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
-	ResponseEntity<ResponseDTO> addDoctor(@Valid @RequestBody Doctor doctors);
+	ResponseEntity<ResponseDTO> addDoctor(@Valid @RequestBody DoctorDTO doctors);
 	
 	@PutMapping(value = "/updateDoctor/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Doctor.class))),
+			@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = DoctorDTO.class))),
 			@ApiResponse(responseCode = "400", description = "Request is not well-formed, syntactically incorrect, or violates schema", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
-	ResponseEntity<ResponseDTO> updateDoctor(@PathVariable("id") Long id, @RequestBody Doctor doctors);
+	ResponseEntity<ResponseDTO> updateDoctor(@PathVariable("id") Long id, @RequestBody DoctorDTO doctors);
 
 }

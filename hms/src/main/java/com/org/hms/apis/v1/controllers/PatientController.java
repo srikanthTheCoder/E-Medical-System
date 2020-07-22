@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.org.hms.apis.v1.V1PatientAPI;
-import com.org.hms.apis.v1.entity.Patient;
+import com.org.hms.apis.v1.models.PatientDTO;
 import com.org.hms.apis.v1.models.ResponseDTO;
 import com.org.hms.apis.v1.service.PatientService;
 
@@ -25,25 +25,25 @@ public class PatientController implements V1PatientAPI{
 	}
 
 	@Override
-	public ResponseEntity<List<Patient>> showAllPatients() {
-		List<Patient> patients = service.getAllPatients();
+	public ResponseEntity<List<PatientDTO>> showAllPatients() {
+		List<PatientDTO> patients = service.getAllPatients();
 		return ResponseEntity.status(HttpStatus.OK).body(patients);
 	}
 
 	@Override
-	public ResponseEntity<Patient> patientViewById(Long id) {
-		Patient patient = service.getPatientById(id);
+	public ResponseEntity<PatientDTO> patientViewById(Long id) {
+		PatientDTO patient = service.getPatientById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(patient);
 	}
 
 	@Override
-	public ResponseEntity<ResponseDTO> addPatient(Patient patient) {
+	public ResponseEntity<ResponseDTO> addPatient(PatientDTO patient) {
 		ResponseDTO response = service.addPatient(patient);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	@Override
-	public ResponseEntity<ResponseDTO> updatePatient(Long id, Patient patient) {
+	public ResponseEntity<ResponseDTO> updatePatient(Long id, PatientDTO patient) {
 		ResponseDTO response = service.updatePatient(id, patient);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 
