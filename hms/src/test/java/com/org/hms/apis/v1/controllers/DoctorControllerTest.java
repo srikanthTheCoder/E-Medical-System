@@ -30,37 +30,37 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.hms.DataBuilder;
-import com.org.hms.apis.v1.models.PatientDTO;
-import com.org.hms.apis.v1.service.PatientService;
+import com.org.hms.apis.v1.models.DoctorDTO;
+import com.org.hms.apis.v1.service.DoctorService;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith({ MockitoExtension.class, SpringExtension.class })
 @MockitoSettings(strictness = Strictness.LENIENT)
 @AutoConfigureMockMvc // need this in Spring Boot test
-class PatientControllerTest {
+class DoctorControllerTest {
 
 	@Mock
-	PatientService service;
+	DoctorService service;
 
 	@InjectMocks
-	PatientController patientController;
+	DoctorController doctorController;
 
 	@Autowired
 	public MockMvc mockMvc;
 
 	@BeforeEach
 	public void setup() {
-		patientController = new PatientController(service);
-		mockMvc = MockMvcBuilders.standaloneSetup(patientController).build();
+		doctorController = new DoctorController(service);
+		mockMvc = MockMvcBuilders.standaloneSetup(doctorController).build();
 	}
 
 	@Test
-	@DisplayName(value = "Should be able search patients by id")
-	public void shouldReturn_Patient_search_by_id() throws Exception {
+	@DisplayName(value = "Should be able search Doctors by id")
+	public void shouldReturn_Doctor_search_by_id() throws Exception {
 		Long id = new Long(1);
-		when(service.getPatientById(id)).thenReturn(DataBuilder.stubGetPatient());
-		RequestBuilder builder = MockMvcRequestBuilders.get("/api/v1/patient/{id}", 1)
+		when(service.getDoctorById(id)).thenReturn(DataBuilder.stubDoctor());
+		RequestBuilder builder = MockMvcRequestBuilders.get("/api/v1/doctors/{id}", 1)
 				.contentType(MediaType.APPLICATION_JSON);
 
 		MockHttpServletResponse response = mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk())
@@ -70,30 +70,39 @@ class PatientControllerTest {
 	}
 
 	@Test
-	@DisplayName(value = "Should be able to create patient")
-	public void shouldReturn_Patient_on_Creation() throws Exception {
+	@DisplayName(value = "Should be able search Doctors by name")
+	public void shouldReturn_Doctor_search_by_name() throws Exception {
+		when(service.getDoctorByName(ArgumentMatchers.anyString())).thenReturn(DataBuilder.stubDoctor());
+		RequestBuilder builder = MockMvcRequestBuilders.get("/api/v1/doctors/viewByName/{name}", "SRIKANTH")
+				.contentType(MediaType.APPLICATION_JSON);
 
-		String jsonString = new ObjectMapper().writeValueAsString(DataBuilder.stubGetPatient());
-		when(service.addPatient(ArgumentMatchers.any(PatientDTO.class))).thenReturn(DataBuilder.stubResponse());
-		RequestBuilder builder = MockMvcRequestBuilders.post("/api/v1/patient/addPatient")
+		MockHttpServletResponse response = mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk())
+				.andReturn().getResponse();
+		Assert.assertTrue(response.getStatus() == HttpStatus.OK.value());
+
+	}
+
+	@Test
+	@DisplayName(value = "Should be able to create Doctor")
+	public void shouldReturn_Doctor_on_Creation() throws Exception {
+
+		String jsonString = new ObjectMapper().writeValueAsString(DataBuilder.stubDoctor());
+		when(service.addDoctor(ArgumentMatchers.any(DoctorDTO.class))).thenReturn(DataBuilder.stubResponse());
+		RequestBuilder builder = MockMvcRequestBuilders.post("/api/v1/doctors/addDoctor")
 				.contentType(MediaType.APPLICATION_JSON).content(jsonString);
 
 		MockHttpServletResponse response = mockMvc.perform(builder)
-				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-				.andReturn().getResponse();
+				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful()).andReturn().getResponse();
 		Assert.assertTrue(response.getStatus() == HttpStatus.CREATED.value());
 
 	}
 
-
 	@Test
-	@DisplayName(value = "Should be able get all patients")
-	public void shouldReturn_All_Patients() throws Exception {
+	@DisplayName(value = "Should be able get all Doctors")
+	public void shouldReturn_All_Doctors() throws Exception {
 
-		when(service.getAllPatients()).thenReturn(DataBuilder.stubGetAllPatientResponse());
-		RequestBuilder builder = MockMvcRequestBuilders
-				.get("/api/v1/patient/")
-				.contentType(MediaType.APPLICATION_JSON);
+		when(service.getAllDoctors()).thenReturn(DataBuilder.stubGetAllDoctorResponse());
+		RequestBuilder builder = MockMvcRequestBuilders.get("/api/v1/doctors/").contentType(MediaType.APPLICATION_JSON);
 
 		MockHttpServletResponse response = mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk())
 				.andReturn().getResponse();
@@ -102,21 +111,18 @@ class PatientControllerTest {
 	}
 
 	@Test
-	@DisplayName(value = "Should be able patients")
-	public void shouldReturn_All_Patient_on_updation() throws Exception {
+	@DisplayName(value = "Should be able Doctors")
+	public void shouldReturn_All_Doctor_on_updation() throws Exception {
 
-		String jsonString = new ObjectMapper().writeValueAsString(DataBuilder.stubGetPatient());
+		String jsonString = new ObjectMapper().writeValueAsString(DataBuilder.stubDoctor());
 		Long id = new Long(1);
-		when(service.updatePatient(id, DataBuilder.stubGetPatient()))
-				.thenReturn(DataBuilder.stubResponse());
-		RequestBuilder builder = MockMvcRequestBuilders.put("/api/v1/patient/updatePatient/{id}", 1)
+		when(service.updateDoctor(id, DataBuilder.stubDoctor())).thenReturn(DataBuilder.stubResponse());
+		RequestBuilder builder = MockMvcRequestBuilders.put("/api/v1/doctors/updateDoctor/{id}", 1)
 				.contentType(MediaType.APPLICATION_JSON).content(jsonString);
 
-		MockHttpServletResponse response = mockMvc.perform(builder)
-				.andExpect(MockMvcResultMatchers.status().isOk())
+		MockHttpServletResponse response = mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk())
 				.andReturn().getResponse();
 		Assert.assertTrue(response.getStatus() == HttpStatus.OK.value());
 	}
-
 
 }
